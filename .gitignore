@@ -15,8 +15,6 @@ target/
 *.ipr
 *.iws
 out/
-!**/src/main/**/out/
-!**/src/test/**/out/
 
 # VS Code
 .vscode/
@@ -29,8 +27,6 @@ out/
 .settings/
 .sts4-cache/
 bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
 
 # NetBeans
 /nbproject/private/
@@ -40,8 +36,6 @@ bin/
 /.nb-gradle/
 
 # (safety) build dirs that might exist inside source
-!**/src/main/**/build/
-!**/src/test/**/build/
 
 # Logs & temp
 logs/
@@ -73,3 +67,31 @@ application-*.properties
 # Keep Gradle wrapper
 !gradle/wrapper/gradle-wrapper.jar
 !gradle/wrapper/gradle-wrapper.properties
+
+# --- OS (Windows) ---
+Thumbs.db
+ehthumbs.db
+
+# --- H2 extra files ---
+*.trace.db
+*.lock.db
+
+# --- Logs (p6spy 등) ---
+p6spy.log
+spy.log
+nohup.out
+
+# --- Front-end (있을 경우) ---
+node_modules/
+
+# --- Patch/merge leftovers ---
+*.orig
+*.rej
+
+# --- Keystores / certs (있을 경우) ---
+*.jks
+*.keystore
+*.p12
+
+
+
