@@ -15,17 +15,28 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import jpabook.jpashop.MainDiscountPolicy;
+import jpabook.jpashop.discount.DiscountPolicy;
 
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
+
 public class OrderService {
 
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
-
-    //주문
+    private final DiscountPolicy discountPolicy;
+    OrderService(OrderRepository orderRepository,
+                 MemberRepository memberRepository,
+                 ItemRepository itemRepository,
+                 @MainDiscountPolicy DiscountPolicy discountPolicy) {
+        this.orderRepository = orderRepository;
+        this.memberRepository = memberRepository;
+        this.itemRepository = itemRepository;
+        this.discountPolicy = discountPolicy;
+    }
+//주문
     @Transactional
     public Long order(Long memberId, Long itemId, int count) {
 
@@ -38,7 +49,11 @@ public class OrderService {
         delivery.setAddress(member.getAddress());
 
         //주문상품 생성
-        OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), count);
+        int itemPrice = item.getPrice();
+        int discountAmount = discountPolicy.discount(member, itemPrice);
+        int finalPrice = Math.max(0, itemPrice - discountAmount);
+        //주문상품 생성 (할인 반영)
+        OrderItem orderItem = OrderItem.createOrderItem(item, finalPrice, count);
 
         //주문 생성
         Order order = Order.createOrder(member, delivery, orderItem);
